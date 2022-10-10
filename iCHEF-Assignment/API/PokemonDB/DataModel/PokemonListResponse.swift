@@ -4,7 +4,7 @@ struct PokemonListResponse: Codable {
     let results: [PokemonListItem]
 }
 
-struct PokemonListItem: Codable {
+struct PokemonListItem: Codable, Hashable {
     let name: String
     let url: String
 }
