@@ -80,6 +80,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6027F98728F41D8E006B82A2 /* PokemonDB */ = {
+			isa = PBXGroup;
+			children = (
+				60986D6E28F3D4AC00E0CC2D /* PokemonDB.swift */,
+				6027F98828F41D9D006B82A2 /* DataModel */,
+			);
+			path = PokemonDB;
+			sourceTree = "<group>";
+		};
+		6027F98828F41D9D006B82A2 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				60986D7028F3D53200E0CC2D /* PokemonListResponse.swift */,
+				60986D7428F3DC8300E0CC2D /* Pokemon.swift */,
+			);
+			path = DataModel;
+			sourceTree = "<group>";
+		};
 		60986D3428F3D02700E0CC2D = {
 			isa = PBXGroup;
 			children = (
@@ -142,9 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				60986D6C28F3D39E00E0CC2D /* APIClient.swift */,
-				60986D6E28F3D4AC00E0CC2D /* PokemonDB.swift */,
-				60986D7028F3D53200E0CC2D /* PokemonListResponse.swift */,
-				60986D7428F3DC8300E0CC2D /* Pokemon.swift */,
+				6027F98728F41D8E006B82A2 /* PokemonDB */,
 			);
 			path = API;
 			sourceTree = "<group>";
