@@ -1,13 +1,10 @@
-//
-//  ContentView.swift
-//  iCHEF-Assignment
-//
-//  Created by 廖慶麟 on 2022/10/10.
-//
-
 import SwiftUI
+import Combine
 
 struct ContentView: View {
+
+    @StateObject private var viewModel = ViewModel()
+
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -15,7 +12,29 @@ struct ContentView: View {
                 .foregroundColor(.accentColor)
             Text("Hello, world!")
         }
+        .onAppear {
+            viewModel.load()
+        }
         .padding()
+    }
+}
+
+private extension ContentView {
+    class ViewModel: ObservableObject {
+        var cancellationToken: AnyCancellable?
+        @Published var items: [PokemonListItem] = []
+
+        func load() {
+            cancellationToken = PokemonListDB.request(.base)
+                .mapError{ error -> Error in
+                    print(error)
+                    return error
+                }
+                .sink(receiveCompletion: { _ in },
+                      receiveValue: { response in
+                    self.items = response.results
+                })
+        }
     }
 }
 
