@@ -5,17 +5,23 @@ struct PokemonFavoriteView: View {
     @ObservedObject var viewModel: ContentView.ViewModel
 
     var body: some View {
-        List {
-            ForEach(viewModel.items, id: \.self) { item in
-                HStack {
-                    Text(item.name)
-
-                    Spacer()
+        NavigationView {
+            List(viewModel.items) { item in
+                ZStack {
+                    NavigationLink(destination: PokemonDetailView()) {
+                        EmptyView()
+                    }.opacity(0)
+                    rowView(name: item.name)
                 }
             }
-            .onDelete { offset in
-                // TODO: Do sth
-            }
+        }
+    }
+
+    private func rowView(name: String) -> some View {
+        HStack() {
+            Text(name)
+
+            Spacer()
         }
     }
 }
