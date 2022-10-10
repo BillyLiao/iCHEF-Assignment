@@ -25,7 +25,7 @@ private extension ContentView {
         @Published var items: [PokemonListItem] = []
 
         func load() {
-            cancellationToken = PokemonListDB.request(.base)
+            cancellationToken = PokemonDB.getList()
                 .mapError{ error -> Error in
                     print(error)
                     return error
