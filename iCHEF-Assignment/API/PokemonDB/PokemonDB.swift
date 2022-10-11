@@ -19,9 +19,8 @@ extension PokemonDB {
             .eraseToAnyPublisher()
     }
 
-    static func getPokemon(id: String) -> AnyPublisher<Pokemon, Error> {
-        let url = baseURL.appending(component: id, directoryHint: .isDirectory)
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+    static func getPokemon(url: String) -> AnyPublisher<Pokemon, Error> {
+        guard let components = URLComponents(url: URL(string: url)!, resolvingAgainstBaseURL: true) else {
             fatalError("Couldn't create URLComponents")
         }
 

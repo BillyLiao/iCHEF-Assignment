@@ -30,7 +30,7 @@ struct ContentView: View {
 
 extension ContentView {
     class ViewModel: ObservableObject {
-        var cancellationToken: AnyCancellable?
+        private var cancellationToken: AnyCancellable?
         @Published var items: [PokemonListItem] = []
 
         func load() {

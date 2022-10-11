@@ -8,7 +8,7 @@ struct PokemonListView: View {
         NavigationView {
             List(viewModel.items) { item in
                 ZStack {
-                    NavigationLink(destination: PokemonDetailView()) {
+                    NavigationLink(destination: PokemonDetailView(.init(item.url))) {
                         EmptyView()
                     }.opacity(0)
                     rowView(name: item.name, isFavorite: false)
