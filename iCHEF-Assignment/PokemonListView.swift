@@ -2,23 +2,24 @@ import SwiftUI
 
 struct PokemonListView: View {
 
-    @ObservedObject var vm: ContentView.ViewModel
-    var action: ((String) -> ())?
-    var rowModels: [RowModel]
+    private var action: ((String) -> ())?
+    private var destination: ((RowModel) -> PokemonDetailView)
+    private var rowModels: [RowModel]
 
-    init(_ vm: ContentView.ViewModel, rowModels: [RowModel], _ action: @escaping (String) -> ()) {
+    init(rowModels: [RowModel],
+         _ action: @escaping (String) -> (),
+         destination: @escaping (RowModel) -> PokemonDetailView)
+    {
         self.action = action
-        self.vm = vm
         self.rowModels = rowModels
+        self.destination = destination
     }
 
     var body: some View {
         NavigationStack {
             List(rowModels) { model in
                 ZStack {
-                    NavigationLink(destination: PokemonDetailView(
-                        .init(name: model.name, url: model.url, favService: vm.favService))
-                    ) {
+                    NavigationLink(destination: destination(model)) {
                         EmptyView()
                     }.opacity(0)
                     rowView(model)
@@ -53,8 +54,12 @@ extension PokemonListView {
         let isFavorite: Bool
     }
 }
+
 struct PokemonListView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListView(.init(), rowModels: []) { _ in }
+        PokemonListView(rowModels: []) { _ in
+        } destination: { model in
+            .init(name: model.name, url: model.url, favService: .init())
+        }
     }
 }

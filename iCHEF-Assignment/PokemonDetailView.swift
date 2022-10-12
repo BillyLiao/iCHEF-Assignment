@@ -3,7 +3,7 @@ import Combine
 
 struct PokemonDetailView: View {
 
-    @ObservedObject var vm: ViewModel
+    @ObservedObject private var vm: ViewModel
 
     var body: some View {
         NavigationView {
@@ -32,8 +32,8 @@ struct PokemonDetailView: View {
         }
     }
 
-    init(_ vm: ViewModel) {
-        self.vm = vm
+    init(name: String, url: String, favService: FavoriteService) {
+        vm = ViewModel.init(name: name, url: url, favService: favService)
     }
 
     var imageView: some View {
@@ -57,7 +57,7 @@ struct PokemonDetailView: View {
     }
 }
 
-extension PokemonDetailView {
+private extension PokemonDetailView {
     class ViewModel: ObservableObject {
         private let url: String
         private var cancellables = Set<AnyCancellable>()
@@ -105,6 +105,6 @@ extension PokemonDetailView {
 
 struct PokemonDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonDetailView(.init(name: "", url: "", favService: .init()))
+        PokemonDetailView(name: "", url: "", favService: .init())
     }
 }

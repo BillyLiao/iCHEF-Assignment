@@ -7,13 +7,13 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            PokemonListView(vm, rowModels: vm.rowModels) { vm.toggle($0) }
+            listView(vm.rowModels)
             .tabItem {
                 Image(systemName: "list.bullet")
                 Text("Pokemon").tag(1)
             }
 
-            PokemonListView(vm, rowModels: vm.favRowModels) { vm.toggle($0) }
+            listView(vm.favRowModels)
             .tabItem {
                 Image(systemName: "heart")
                 Text("Favorite").tag(2)
@@ -28,9 +28,17 @@ struct ContentView: View {
             UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         }
     }
+
+    private func listView(_ rowModels: [PokemonListView.RowModel]) -> some View {
+        PokemonListView(rowModels: rowModels) {
+            vm.toggle($0)
+        } destination: { model in
+            .init(name: model.name, url: model.url, favService: vm.favService)
+        }
+    }
 }
 
-extension ContentView {
+private extension ContentView {
     class ViewModel: ObservableObject {
         private var cancellables = Set<AnyCancellable>()
 
