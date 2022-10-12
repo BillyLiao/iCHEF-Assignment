@@ -2,36 +2,38 @@ import SwiftUI
 
 struct PokemonFavoriteView: View {
 
-    @ObservedObject var viewModel: ContentView.ViewModel
+    @ObservedObject var vm: ContentView.ViewModel
 
-    init(_ viewModel: ContentView.ViewModel) {
-        self.viewModel = viewModel
+    init(_ vm: ContentView.ViewModel) {
+        self.vm = vm
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
-                ForEach(viewModel.favRowModels) { model in
+                ForEach(vm.favRowModels) { model in
                     ZStack {
-                        NavigationLink(destination: PokemonDetailView(.init(model.url))) {
+                        NavigationLink(destination: PokemonDetailView(
+                            .init(name: model.name, url: model.url, favService: vm.favService))
+                        ) {
                             EmptyView()
                         }.opacity(0)
-                        rowView(model.name)
+                        rowView(model)
                     }
                 }
                 .onDelete { indexSet in
                     indexSet.forEach {
-                        let name = viewModel.favRowModels[$0].name
-                        viewModel.toggle(name)
+                        let name = vm.favRowModels[$0].name
+                        vm.toggle(name)
                     }
                 }
             }
         }
     }
 
-    private func rowView(_ name: String) -> some View {
+    private func rowView(_ model: ContentView.RowModel) -> some View {
         HStack {
-            Text(name)
+            Text(model.name)
             Spacer()
         }
     }

@@ -9,7 +9,7 @@ struct PokemonDetailView: View {
         NavigationView {
             HStack {
                 VStack(alignment: .leading) {
-                    imageView()
+                    imageView
 
                     Text("ID：\(vm.pokemon.id)")
                     Text("Name：\(vm.pokemon.name)")
@@ -27,13 +27,18 @@ struct PokemonDetailView: View {
                 vm.loadData()
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    vm.toggle()
+                } label: {
+                    vm.toolBarIcon
+                }.buttonStyle(.plain)
+            }
+        }
     }
 
-    init(_ vm: ViewModel) {
-        self.vm = vm
-    }
-
-    private func imageView() -> some View {
+    var imageView: some View {
         AsyncImage(url: URL(string: vm.pokemon.sprites.front_default)) { image in
             image.resizable().scaledToFill()
         } placeholder: {
@@ -42,25 +47,41 @@ struct PokemonDetailView: View {
         .frame(width: 100, height: 100)
         .cornerRadius(16)
     }
+
+    init(_ vm: ViewModel) {
+        self.vm = vm
+    }
 }
 
 extension PokemonDetailView {
     class ViewModel: ObservableObject {
         private let url: String
-        private var cancellationToken: AnyCancellable?
+        private var cancellables = Set<AnyCancellable>()
 
-        @Published var pokemon: Pokemon = .init(name: "", height: 0, weight: 0, id: 0, sprites: .init(front_default: ""), types: [])
+        @ObservedObject var favService: FavoriteService
+        @Published var toolBarIcon: Image = .init(systemName: "heart")
+        @Published var pokemon: Pokemon = .init(name: "",
+                                                height: 0,
+                                                weight: 0,
+                                                id: 0,
+                                                sprites: .init(front_default: ""),
+                                                types: [])
 
         var types: String {
             pokemon.types.map { $0.type.name }.joined(separator: ", ")
         }
 
-        init(_ url: String) {
+        init(name: String, url: String, favService: FavoriteService) {
             self.url = url
+            self.favService = favService
+            self.favService.$favs
+                .map { Image(systemName: $0.contains(name) ? "heart.fill" : "heart") }
+                .assign(to: \.toolBarIcon, on: self)
+                .store(in: &cancellables)
         }
 
         func loadData() {
-            cancellationToken = PokemonDB.getPokemon(url: url)
+            PokemonDB.getPokemon(url: url)
                 .mapError{ error -> Error in
                     print(error)
                     return error
@@ -69,12 +90,17 @@ extension PokemonDetailView {
                       receiveValue: { response in
                     self.pokemon = response
                 })
+                .store(in: &cancellables)
+        }
+
+        func toggle() {
+            favService.toggle(pokemon.name)
         }
     }
 }
 
 struct PokemonDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonDetailView(.init("1"))
+        PokemonDetailView(.init(name: "", url: "", favService: .init()))
     }
 }
