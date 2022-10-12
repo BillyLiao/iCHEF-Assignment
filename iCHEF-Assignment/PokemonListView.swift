@@ -2,15 +2,15 @@ import SwiftUI
 
 struct PokemonListView: View {
 
-    @ObservedObject var viewModel: ContentView.ViewModel
+    @ObservedObject var vm: ContentView.ViewModel
 
-    init(_ viewModel: ContentView.ViewModel) {
-        self.viewModel = viewModel
+    init(_ vm: ContentView.ViewModel) {
+        self.vm = vm
     }
 
     var body: some View {
         NavigationView {
-            List(viewModel.rowModels) { model in
+            List(vm.rowModels) { model in
                 ZStack {
                     NavigationLink(destination: PokemonDetailView(.init(model.url))) {
                         EmptyView()
@@ -28,7 +28,7 @@ struct PokemonListView: View {
             Spacer()
 
             Button {
-                viewModel.toggle(model.name)
+                vm.toggle(model.name)
             } label: {
                 model.buttonIcon
             }.buttonStyle(.plain)

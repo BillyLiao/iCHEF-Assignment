@@ -11,7 +11,7 @@ struct PokemonFavoriteView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(viewModel.favoriteRowModels) { model in
+                ForEach(viewModel.favRowModels) { model in
                     ZStack {
                         NavigationLink(destination: PokemonDetailView(.init(model.url))) {
                             EmptyView()
@@ -21,7 +21,7 @@ struct PokemonFavoriteView: View {
                 }
                 .onDelete { indexSet in
                     indexSet.forEach {
-                        let name = viewModel.favoriteRowModels[$0].name
+                        let name = viewModel.favRowModels[$0].name
                         viewModel.toggle(name)
                     }
                 }
