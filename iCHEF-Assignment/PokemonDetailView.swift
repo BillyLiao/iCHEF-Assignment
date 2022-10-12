@@ -10,13 +10,7 @@ struct PokemonDetailView: View {
             HStack {
                 VStack(alignment: .leading) {
                     imageView
-
-                    Text("ID：\(vm.pokemon.id)")
-                    Text("Name：\(vm.pokemon.name)")
-                    Text("Height：\(vm.pokemon.height)")
-                    Text("Weight：\(vm.pokemon.weight)")
-                    Text("Types：\(vm.types)")
-
+                    textView
                     Spacer()
                 }
                 .padding(.leading, 24)
@@ -38,6 +32,10 @@ struct PokemonDetailView: View {
         }
     }
 
+    init(_ vm: ViewModel) {
+        self.vm = vm
+    }
+
     var imageView: some View {
         AsyncImage(url: URL(string: vm.pokemon.sprites.front_default)) { image in
             image.resizable().scaledToFill()
@@ -48,8 +46,14 @@ struct PokemonDetailView: View {
         .cornerRadius(16)
     }
 
-    init(_ vm: ViewModel) {
-        self.vm = vm
+    var textView: some View {
+        VStack {
+            Text("ID：\(vm.pokemon.id)")
+            Text("Name：\(vm.pokemon.name)")
+            Text("Height：\(vm.pokemon.height)")
+            Text("Weight：\(vm.pokemon.weight)")
+            Text("Types：\(vm.types)")
+        }
     }
 }
 
