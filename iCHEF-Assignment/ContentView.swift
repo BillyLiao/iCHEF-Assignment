@@ -7,15 +7,18 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            PokemonListView(vm).tabItem {
+            listView(vm.rowModels)
+            .tabItem {
                 Image(systemName: "list.bullet")
                 Text("Pokemon").tag(1)
             }
 
-            PokemonFavoriteView(vm).tabItem {
+            listView(vm.favRowModels)
+            .tabItem {
                 Image(systemName: "heart")
                 Text("Favorite").tag(2)
             }
+
         }
         .onAppear {
             vm.load()
@@ -25,15 +28,23 @@ struct ContentView: View {
             UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         }
     }
+
+    private func listView(_ rowModels: [PokemonListView.RowModel]) -> some View {
+        PokemonListView(rowModels: rowModels) {
+            vm.toggle($0)
+        } destination: { model in
+            .init(name: model.name, url: model.url, favService: vm.favService)
+        }
+    }
 }
 
-extension ContentView {
+private extension ContentView {
     class ViewModel: ObservableObject {
         private var cancellables = Set<AnyCancellable>()
 
         @ObservedObject var favService: FavoriteService = .init()
-        @Published var rowModels: [RowModel] = []
-        @Published var favRowModels: [RowModel] = []
+        @Published var rowModels: [PokemonListView.RowModel] = []
+        @Published var favRowModels: [PokemonListView.RowModel] = []
 
         init() {
             $rowModels
@@ -59,7 +70,7 @@ extension ContentView {
                       receiveValue: { [weak self] response in
                     guard let self = self else { return }
                     self.rowModels = response.results.map {
-                        RowModel(name: $0.name, url: $0.url, isFavorite: self.favService.isFavorite($0.name))
+                        PokemonListView.RowModel(name: $0.name, url: $0.url, isFavorite: self.favService.isFavorite($0.name))
                     }
                 })
                 .store(in: &cancellables)
@@ -68,16 +79,6 @@ extension ContentView {
         func toggle(_ name: String) {
             favService.toggle(name)
         }
-    }
-
-    struct RowModel: Identifiable {
-        let id = UUID()
-        let name: String
-        let url: String
-        var buttonIcon: Image {
-            Image(systemName: isFavorite ? "heart.fill" : "heart")
-        }
-        let isFavorite: Bool
     }
 }
 

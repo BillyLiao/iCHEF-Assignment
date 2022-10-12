@@ -2,37 +2,40 @@ import SwiftUI
 
 struct PokemonListView: View {
 
-    @ObservedObject var vm: ContentView.ViewModel
+    private var action: ((String) -> ())?
+    private var destination: ((RowModel) -> PokemonDetailView)
+    private var rowModels: [RowModel]
 
-    init(_ vm: ContentView.ViewModel) {
-        self.vm = vm
+    init(rowModels: [RowModel],
+         _ action: @escaping (String) -> (),
+         destination: @escaping (RowModel) -> PokemonDetailView)
+    {
+        self.action = action
+        self.rowModels = rowModels
+        self.destination = destination
     }
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(vm.rowModels) { model in
-                    ZStack {
-                        NavigationLink(destination: PokemonDetailView(
-                            .init(name: model.name, url: model.url, favService: vm.favService)
-                        )) {
-                            EmptyView()
-                        }.opacity(0)
-                        rowView(model)
-                    }
+            List(rowModels) { model in
+                ZStack {
+                    NavigationLink(destination: destination(model)) {
+                        EmptyView()
+                    }.opacity(0)
+                    rowView(model)
                 }
             }
         }
     }
 
-    private func rowView(_ model: ContentView.RowModel) -> some View {
+    private func rowView(_ model: RowModel) -> some View {
         HStack {
             Text(model.name)
 
             Spacer()
 
             Button {
-                vm.toggle(model.name)
+                action?(model.name)
             } label: {
                 model.buttonIcon
             }.buttonStyle(.plain)
@@ -40,8 +43,23 @@ struct PokemonListView: View {
     }
 }
 
+extension PokemonListView {
+    struct RowModel: Identifiable {
+        let id = UUID()
+        let name: String
+        let url: String
+        var buttonIcon: Image {
+            Image(systemName: isFavorite ? "heart.fill" : "heart")
+        }
+        let isFavorite: Bool
+    }
+}
+
 struct PokemonListView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListView(.init())
+        PokemonListView(rowModels: []) { _ in
+        } destination: { model in
+            .init(name: model.name, url: model.url, favService: .init())
+        }
     }
 }

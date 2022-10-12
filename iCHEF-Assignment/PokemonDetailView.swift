@@ -3,20 +3,14 @@ import Combine
 
 struct PokemonDetailView: View {
 
-    @ObservedObject var vm: ViewModel
+    @ObservedObject private var vm: ViewModel
 
     var body: some View {
         NavigationView {
             HStack {
                 VStack(alignment: .leading) {
                     imageView
-
-                    Text("ID：\(vm.pokemon.id)")
-                    Text("Name：\(vm.pokemon.name)")
-                    Text("Height：\(vm.pokemon.height)")
-                    Text("Weight：\(vm.pokemon.weight)")
-                    Text("Types：\(vm.types)")
-
+                    textView
                     Spacer()
                 }
                 .padding(.leading, 24)
@@ -38,6 +32,10 @@ struct PokemonDetailView: View {
         }
     }
 
+    init(name: String, url: String, favService: FavoriteService) {
+        vm = ViewModel.init(name: name, url: url, favService: favService)
+    }
+
     var imageView: some View {
         AsyncImage(url: URL(string: vm.pokemon.sprites.front_default)) { image in
             image.resizable().scaledToFill()
@@ -48,12 +46,18 @@ struct PokemonDetailView: View {
         .cornerRadius(16)
     }
 
-    init(_ vm: ViewModel) {
-        self.vm = vm
+    var textView: some View {
+        VStack {
+            Text("ID：\(vm.pokemon.id)")
+            Text("Name：\(vm.pokemon.name)")
+            Text("Height：\(vm.pokemon.height)")
+            Text("Weight：\(vm.pokemon.weight)")
+            Text("Types：\(vm.types)")
+        }
     }
 }
 
-extension PokemonDetailView {
+private extension PokemonDetailView {
     class ViewModel: ObservableObject {
         private let url: String
         private var cancellables = Set<AnyCancellable>()
@@ -101,6 +105,6 @@ extension PokemonDetailView {
 
 struct PokemonDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonDetailView(.init(name: "", url: "", favService: .init()))
+        PokemonDetailView(name: "", url: "", favService: .init())
     }
 }
