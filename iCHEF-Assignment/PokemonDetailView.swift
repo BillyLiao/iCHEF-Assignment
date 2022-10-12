@@ -3,7 +3,7 @@ import Combine
 
 struct PokemonDetailView: View {
 
-    @ObservedObject var viewModel: ViewModel
+    @ObservedObject var vm: ViewModel
 
     var body: some View {
         NavigationView {
@@ -11,11 +11,11 @@ struct PokemonDetailView: View {
                 VStack(alignment: .leading) {
                     imageView()
 
-                    Text("ID：\(viewModel.pokemon.id)")
-                    Text("Name：\(viewModel.pokemon.name)")
-                    Text("Height：\(viewModel.pokemon.height)")
-                    Text("Weight：\(viewModel.pokemon.weight)")
-                    Text("Types：\(viewModel.types)")
+                    Text("ID：\(vm.pokemon.id)")
+                    Text("Name：\(vm.pokemon.name)")
+                    Text("Height：\(vm.pokemon.height)")
+                    Text("Weight：\(vm.pokemon.weight)")
+                    Text("Types：\(vm.types)")
 
                     Spacer()
                 }
@@ -24,17 +24,17 @@ struct PokemonDetailView: View {
                 Spacer()
             }
             .onAppear {
-                viewModel.loadData()
+                vm.loadData()
             }
         }
     }
 
-    init(_ viewModel: ViewModel) {
-        self.viewModel = viewModel
+    init(_ vm: ViewModel) {
+        self.vm = vm
     }
 
     private func imageView() -> some View {
-        AsyncImage(url: URL(string: viewModel.pokemon.sprites.front_default)) { image in
+        AsyncImage(url: URL(string: vm.pokemon.sprites.front_default)) { image in
             image.resizable().scaledToFill()
         } placeholder: {
             Color.gray.opacity(0.1)

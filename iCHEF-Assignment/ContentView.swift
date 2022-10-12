@@ -25,40 +25,48 @@ struct ContentView: View {
 
 extension ContentView {
     class ViewModel: ObservableObject {
-        private var cancellationToken: AnyCancellable?
+        private var cancellables = Set<AnyCancellable>()
+        private let userDefault = UserDefaults.standard
+        private let favKey = "Favorites"
         @Published var rowModels: [RowModel] = []
-        @Published var favoriteRowModels: [RowModel] = []
-
-        private var favorites: [String] = [] {
+        @Published var favRowModels: [RowModel] = []
+        @Published private var favorites: [String] = [] {
             didSet {
-                rowModels = rowModels.map {
-                    .init(name: $0.name,
-                          url: $0.url,
-                          buttonIcon: self.getButtonIcon(of: $0.name))
-                }
-
-                favoriteRowModels = rowModels.filter { isFavorite($0.name) }
+                save()
             }
         }
 
+        init() {
+            guard let savedFavs = userDefault.value(forKey: favKey) as? [String] else { return }
+            favorites = savedFavs
+
+            $rowModels
+                .map { $0.filter { $0.isFavorite } }
+                .assign(to: \.favRowModels, on: self)
+                .store(in: &cancellables)
+
+            $favorites
+                .map { favs in
+                    self.rowModels.map { .init(name: $0.name, url: $0.url, isFavorite: favs.contains($0.name)) }
+                }
+                .assign(to: \.rowModels, on: self)
+                .store(in: &cancellables)
+        }
+
         func load() {
-            cancellationToken = PokemonDB.getList()
+            PokemonDB.getList()
                 .mapError{ error -> Error in
                     print(error)
                     return error
                 }
                 .sink(receiveCompletion: { _ in },
-                      receiveValue: { response in
-                    self.rowModels = response.results.map { [weak self] item in
-                        guard let self = self else {
-                            return .init(name: "", url: "", buttonIcon: .init(systemName: "heart"))
-                        }
-
-                        return RowModel(name: item.name,
-                                        url: item.url,
-                                        buttonIcon: self.getButtonIcon(of: item.name))
+                      receiveValue: { [weak self] response in
+                    guard let self = self else { return }
+                    self.rowModels = response.results.map {
+                        RowModel(name: $0.name, url: $0.url, isFavorite: self.isFavorite($0.name))
                     }
                 })
+                .store(in: &cancellables)
         }
 
         func toggle(_ name: String) {
@@ -77,8 +85,8 @@ extension ContentView {
             favorites.contains(name)
         }
 
-        private func getButtonIcon(of name: String) -> Image {
-            Image(systemName: isFavorite(name) ? "heart.fill" : "heart")
+        private func save() {
+            userDefault.set(favorites, forKey: favKey)
         }
     }
 
@@ -86,7 +94,10 @@ extension ContentView {
         let id = UUID()
         var name: String
         var url: String
-        var buttonIcon: Image
+        var buttonIcon: Image {
+            Image(systemName: isFavorite ? "heart.fill" : "heart")
+        }
+        var isFavorite: Bool
     }
 }
 
