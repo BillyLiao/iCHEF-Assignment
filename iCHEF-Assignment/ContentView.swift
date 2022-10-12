@@ -19,6 +19,10 @@ struct ContentView: View {
         }
         .onAppear {
             vm.load()
+            // An workaround to solve tab bar color change when the list's empty
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         }
     }
 }
@@ -26,26 +30,18 @@ struct ContentView: View {
 extension ContentView {
     class ViewModel: ObservableObject {
         private var cancellables = Set<AnyCancellable>()
-        private let userDefault = UserDefaults.standard
-        private let favKey = "Favorites"
+
+        @ObservedObject var favService: FavoriteService = .init()
         @Published var rowModels: [RowModel] = []
         @Published var favRowModels: [RowModel] = []
-        @Published private var favorites: [String] = [] {
-            didSet {
-                save()
-            }
-        }
 
         init() {
-            guard let savedFavs = userDefault.value(forKey: favKey) as? [String] else { return }
-            favorites = savedFavs
-
             $rowModels
                 .map { $0.filter { $0.isFavorite } }
                 .assign(to: \.favRowModels, on: self)
                 .store(in: &cancellables)
 
-            $favorites
+            favService.$favs
                 .map { favs in
                     self.rowModels.map { .init(name: $0.name, url: $0.url, isFavorite: favs.contains($0.name)) }
                 }
@@ -63,41 +59,25 @@ extension ContentView {
                       receiveValue: { [weak self] response in
                     guard let self = self else { return }
                     self.rowModels = response.results.map {
-                        RowModel(name: $0.name, url: $0.url, isFavorite: self.isFavorite($0.name))
+                        RowModel(name: $0.name, url: $0.url, isFavorite: self.favService.isFavorite($0.name))
                     }
                 })
                 .store(in: &cancellables)
         }
 
         func toggle(_ name: String) {
-            isFavorite(name) ? unlike(name) : like(name)
-        }
-
-        private func like(_ name: String) {
-            favorites.append(name)
-        }
-
-        private func unlike(_ name: String) {
-            favorites.removeAll{ $0 == name }
-        }
-
-        private func isFavorite(_ name: String) -> Bool {
-            favorites.contains(name)
-        }
-
-        private func save() {
-            userDefault.set(favorites, forKey: favKey)
+            favService.toggle(name)
         }
     }
 
     struct RowModel: Identifiable {
         let id = UUID()
-        var name: String
-        var url: String
+        let name: String
+        let url: String
         var buttonIcon: Image {
             Image(systemName: isFavorite ? "heart.fill" : "heart")
         }
-        var isFavorite: Bool
+        let isFavorite: Bool
     }
 }
 

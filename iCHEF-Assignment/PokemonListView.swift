@@ -9,13 +9,17 @@ struct PokemonListView: View {
     }
 
     var body: some View {
-        NavigationView {
-            List(vm.rowModels) { model in
-                ZStack {
-                    NavigationLink(destination: PokemonDetailView(.init(model.url))) {
-                        EmptyView()
-                    }.opacity(0)
-                    rowView(model)
+        NavigationStack {
+            List {
+                ForEach(vm.rowModels) { model in
+                    ZStack {
+                        NavigationLink(destination: PokemonDetailView(
+                            .init(name: model.name, url: model.url, favService: vm.favService)
+                        )) {
+                            EmptyView()
+                        }.opacity(0)
+                        rowView(model)
+                    }
                 }
             }
         }
