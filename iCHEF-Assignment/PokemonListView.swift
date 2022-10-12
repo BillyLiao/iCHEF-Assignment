@@ -4,37 +4,40 @@ struct PokemonListView: View {
 
     @ObservedObject var viewModel: ContentView.ViewModel
 
+    init(_ viewModel: ContentView.ViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         NavigationView {
-            List(viewModel.items) { item in
+            List(viewModel.rowModels) { model in
                 ZStack {
-                    NavigationLink(destination: PokemonDetailView(.init(item.url))) {
+                    NavigationLink(destination: PokemonDetailView(.init(model.url))) {
                         EmptyView()
                     }.opacity(0)
-                    rowView(name: item.name, isFavorite: false)
+                    rowView(model)
                 }
             }
         }
     }
 
-    private func rowView(name: String, isFavorite: Bool) -> some View {
+    private func rowView(_ model: ContentView.RowModel) -> some View {
         HStack {
-            Text(name)
+            Text(model.name)
 
             Spacer()
 
             Button {
-                // TODO: Do sth
-                print("Tapped!")
+                viewModel.toggle(model.name)
             } label: {
-                Image(systemName: "heart")
-            }
+                model.buttonIcon
+            }.buttonStyle(.plain)
         }
     }
 }
 
 struct PokemonListView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListView(viewModel: .init())
+        PokemonListView(.init())
     }
 }

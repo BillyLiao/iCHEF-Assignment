@@ -9,20 +9,13 @@ struct PokemonDetailView: View {
         NavigationView {
             HStack {
                 VStack(alignment: .leading) {
-                    AsyncImage(url: URL(string: viewModel.pokemon.sprites.front_default)) { image in
-                        image.resizable().scaledToFill()
-                    } placeholder: {
-                        Color.gray.opacity(0.1)
-                    }
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(16)
+                    imageView()
 
                     Text("ID：\(viewModel.pokemon.id)")
                     Text("Name：\(viewModel.pokemon.name)")
                     Text("Height：\(viewModel.pokemon.height)")
                     Text("Weight：\(viewModel.pokemon.weight)")
-                    let types = viewModel.pokemon.types.map { $0.type.name }.joined(separator: ", ")
-                    Text("Types：\(types)")
+                    Text("Types：\(viewModel.types)")
 
                     Spacer()
                 }
@@ -39,6 +32,16 @@ struct PokemonDetailView: View {
     init(_ viewModel: ViewModel) {
         self.viewModel = viewModel
     }
+
+    private func imageView() -> some View {
+        AsyncImage(url: URL(string: viewModel.pokemon.sprites.front_default)) { image in
+            image.resizable().scaledToFill()
+        } placeholder: {
+            Color.gray.opacity(0.1)
+        }
+        .frame(width: 100, height: 100)
+        .cornerRadius(16)
+    }
 }
 
 extension PokemonDetailView {
@@ -47,11 +50,15 @@ extension PokemonDetailView {
         private var cancellationToken: AnyCancellable?
 
         @Published var pokemon: Pokemon = .init(name: "", height: 0, weight: 0, id: 0, sprites: .init(front_default: ""), types: [])
-        
+
+        var types: String {
+            pokemon.types.map { $0.type.name }.joined(separator: ", ")
+        }
+
         init(_ url: String) {
             self.url = url
         }
-        
+
         func loadData() {
             cancellationToken = PokemonDB.getPokemon(url: url)
                 .mapError{ error -> Error in
