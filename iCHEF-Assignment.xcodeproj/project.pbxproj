@@ -9,14 +9,15 @@
 /* Begin PBXBuildFile section */
 		6027F98A28F4224E006B82A2 /* PokemonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6027F98928F4224E006B82A2 /* PokemonListView.swift */; };
 		6027F98E28F4272D006B82A2 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6027F98D28F4272D006B82A2 /* PokemonDetailView.swift */; };
+		60578BFA28F7F39000642D35 /* ContentViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60578BF928F7F39000642D35 /* ContentViewModelTests.swift */; };
+		60578BFC28F8067000642D35 /* FavoriteServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60578BFB28F8067000642D35 /* FavoriteServiceTests.swift */; };
+		60578BFE28F80B1600642D35 /* PokemonDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60578BFD28F80B1600642D35 /* PokemonDetailViewModelTests.swift */; };
 		605BE6FB28F6A5FA0031B2C9 /* FavoriteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605BE6FA28F6A5FA0031B2C9 /* FavoriteService.swift */; };
 		60986D4128F3D02700E0CC2D /* iCHEF_AssignmentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D4028F3D02700E0CC2D /* iCHEF_AssignmentApp.swift */; };
 		60986D4328F3D02700E0CC2D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D4228F3D02700E0CC2D /* ContentView.swift */; };
 		60986D4528F3D02800E0CC2D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60986D4428F3D02800E0CC2D /* Assets.xcassets */; };
 		60986D4928F3D02800E0CC2D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60986D4828F3D02800E0CC2D /* Preview Assets.xcassets */; };
 		60986D5328F3D02800E0CC2D /* iCHEF_AssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D5228F3D02800E0CC2D /* iCHEF_AssignmentTests.swift */; };
-		60986D5D28F3D02800E0CC2D /* iCHEF_AssignmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D5C28F3D02800E0CC2D /* iCHEF_AssignmentUITests.swift */; };
-		60986D5F28F3D02800E0CC2D /* iCHEF_AssignmentUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D5E28F3D02800E0CC2D /* iCHEF_AssignmentUITestsLaunchTests.swift */; };
 		60986D6D28F3D39E00E0CC2D /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D6C28F3D39E00E0CC2D /* APIClient.swift */; };
 		60986D6F28F3D4AC00E0CC2D /* PokemonDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D6E28F3D4AC00E0CC2D /* PokemonDB.swift */; };
 		60986D7128F3D53200E0CC2D /* PokemonListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60986D7028F3D53200E0CC2D /* PokemonListResponse.swift */; };
@@ -43,6 +44,9 @@
 /* Begin PBXFileReference section */
 		6027F98928F4224E006B82A2 /* PokemonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListView.swift; sourceTree = "<group>"; };
 		6027F98D28F4272D006B82A2 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
+		60578BF928F7F39000642D35 /* ContentViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModelTests.swift; sourceTree = "<group>"; };
+		60578BFB28F8067000642D35 /* FavoriteServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteServiceTests.swift; sourceTree = "<group>"; };
+		60578BFD28F80B1600642D35 /* PokemonDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewModelTests.swift; sourceTree = "<group>"; };
 		605BE6FA28F6A5FA0031B2C9 /* FavoriteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteService.swift; sourceTree = "<group>"; };
 		60986D3D28F3D02700E0CC2D /* iCHEF-Assignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iCHEF-Assignment.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		60986D4028F3D02700E0CC2D /* iCHEF_AssignmentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCHEF_AssignmentApp.swift; sourceTree = "<group>"; };
@@ -53,8 +57,6 @@
 		60986D4E28F3D02800E0CC2D /* iCHEF-AssignmentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iCHEF-AssignmentTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		60986D5228F3D02800E0CC2D /* iCHEF_AssignmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCHEF_AssignmentTests.swift; sourceTree = "<group>"; };
 		60986D5828F3D02800E0CC2D /* iCHEF-AssignmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iCHEF-AssignmentUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		60986D5C28F3D02800E0CC2D /* iCHEF_AssignmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCHEF_AssignmentUITests.swift; sourceTree = "<group>"; };
-		60986D5E28F3D02800E0CC2D /* iCHEF_AssignmentUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCHEF_AssignmentUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		60986D6C28F3D39E00E0CC2D /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		60986D6E28F3D4AC00E0CC2D /* PokemonDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDB.swift; sourceTree = "<group>"; };
 		60986D7028F3D53200E0CC2D /* PokemonListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListResponse.swift; sourceTree = "<group>"; };
@@ -109,7 +111,6 @@
 			children = (
 				60986D3F28F3D02700E0CC2D /* iCHEF-Assignment */,
 				60986D5128F3D02800E0CC2D /* iCHEF-AssignmentTests */,
-				60986D5B28F3D02800E0CC2D /* iCHEF-AssignmentUITests */,
 				60986D3E28F3D02700E0CC2D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -152,17 +153,11 @@
 			isa = PBXGroup;
 			children = (
 				60986D5228F3D02800E0CC2D /* iCHEF_AssignmentTests.swift */,
+				60578BF928F7F39000642D35 /* ContentViewModelTests.swift */,
+				60578BFB28F8067000642D35 /* FavoriteServiceTests.swift */,
+				60578BFD28F80B1600642D35 /* PokemonDetailViewModelTests.swift */,
 			);
 			path = "iCHEF-AssignmentTests";
-			sourceTree = "<group>";
-		};
-		60986D5B28F3D02800E0CC2D /* iCHEF-AssignmentUITests */ = {
-			isa = PBXGroup;
-			children = (
-				60986D5C28F3D02800E0CC2D /* iCHEF_AssignmentUITests.swift */,
-				60986D5E28F3D02800E0CC2D /* iCHEF_AssignmentUITestsLaunchTests.swift */,
-			);
-			path = "iCHEF-AssignmentUITests";
 			sourceTree = "<group>";
 		};
 		60986D6B28F3D39000E0CC2D /* API */ = {
@@ -320,7 +315,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60578BFC28F8067000642D35 /* FavoriteServiceTests.swift in Sources */,
+				60578BFA28F7F39000642D35 /* ContentViewModelTests.swift in Sources */,
 				60986D5328F3D02800E0CC2D /* iCHEF_AssignmentTests.swift in Sources */,
+				60578BFE28F80B1600642D35 /* PokemonDetailViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,8 +326,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60986D5D28F3D02800E0CC2D /* iCHEF_AssignmentUITests.swift in Sources */,
-				60986D5F28F3D02800E0CC2D /* iCHEF_AssignmentUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

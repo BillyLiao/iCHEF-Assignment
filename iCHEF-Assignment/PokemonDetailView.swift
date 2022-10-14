@@ -57,7 +57,7 @@ struct PokemonDetailView: View {
     }
 }
 
-private extension PokemonDetailView {
+extension PokemonDetailView {
     class ViewModel: ObservableObject {
         private let url: String
         private var cancellables = Set<AnyCancellable>()
