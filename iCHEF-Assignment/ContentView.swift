@@ -38,7 +38,7 @@ struct ContentView: View {
     }
 }
 
-private extension ContentView {
+extension ContentView {
     class ViewModel: ObservableObject {
         private var cancellables = Set<AnyCancellable>()
 

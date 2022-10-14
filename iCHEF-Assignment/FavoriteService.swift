@@ -4,6 +4,7 @@ class FavoriteService: ObservableObject {
     private let userDefault = UserDefaults.standard
     private let favKey = "Favorites"
 
+    // TODO: Use Set Instead
     @Published var favs: [String] = [] {
         didSet {
             save()
@@ -19,16 +20,16 @@ class FavoriteService: ObservableObject {
         isFavorite(name) ? unlike(name) : like(name)
     }
 
-    func like(_ name: String) {
+    func isFavorite(_ name: String) -> Bool {
+        favs.contains(name)
+    }
+
+    private func like(_ name: String) {
         favs.append(name)
     }
 
-    func unlike(_ name: String) {
+    private func unlike(_ name: String) {
         favs.removeAll{ $0 == name }
-    }
-
-    func isFavorite(_ name: String) -> Bool {
-        favs.contains(name)
     }
 
     private func save() {
